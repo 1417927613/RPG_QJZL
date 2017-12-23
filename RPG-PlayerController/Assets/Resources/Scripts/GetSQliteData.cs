@@ -83,8 +83,28 @@ public class GetSQliteData
     /// <returns></returns>
     public SqliteDataReader GetDataReader(string tableName, string condition, string value)
     {
-        string sqQuery = "SELECT *FROM " + tableName + " WHERE " + condition + " = " + "'" + value + "'";
+        string sqlQuery = "SELECT *FROM " + tableName + " WHERE " + condition + " = " + "'" + value + "'";
 
-        return CreateCommand(sqQuery);
+        return CreateCommand(sqlQuery);
+    }
+
+    /// <summary>
+    /// 更新某一行数据
+    /// </summary>
+    /// <param name="tableName">表名</param>
+    /// <param name="datas">字段数组</param>
+    /// <param name="dataValues">数据数组</param>
+    /// <param name="condition">条件</param>
+    /// <param name="value">值</param>
+    /// <returns></returns>
+    public void UpdateDataReader(string tableName, string[] datas, string[] dataValues, string condition, string value)
+    {
+        string sqlQuery = "UPDATE " + tableName + " SET " + datas[0] + " = " + "'" + dataValues[0] + "'";
+        for (int i = 1; i < datas.Length; i++)
+        {
+            sqlQuery += ", " + datas[i] + " = " + "'" + dataValues[i] + "'";
+        }
+        sqlQuery += " WHERE " + condition + " = " + "'" + value + "'";
+        CreateCommand(sqlQuery);
     }
 }

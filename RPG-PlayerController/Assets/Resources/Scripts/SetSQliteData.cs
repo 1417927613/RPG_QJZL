@@ -4,7 +4,7 @@ using UnityEngine;
 using Mono.Data.Sqlite;
 using System.IO;
 
-/*此脚本用数据库数据来赋值*/
+/*此脚本用来处理数据库数据*/
 public class SetSQliteData
 {
     static SetSQliteData _instance;
@@ -29,14 +29,14 @@ public class SetSQliteData
     /// <summary>
     /// 给小怪模型类赋值
     /// </summary>
-    /// <param name="level">小怪等级</param>
+    /// <param name="conditon">小怪等级</param>
     /// <param name="value">值</param>
     /// <returns></returns>
-    public LowMonsterModel LowMonster(string level, string value)
+    public LowMonsterModel LowMonster(string conditon, string value)
     {
         getSQliteData.OpenDB("Data Source=" + Path.Combine(Application.persistentDataPath, ConstData.dataBase));//根据路径打开数据库
         LowMonsterModel lowMonster = new LowMonsterModel();//创建小怪模型类对象
-        SqliteDataReader reader =  getSQliteData.GetDataReader(ConstData.T_lowMonster, level, value);
+        SqliteDataReader reader =  getSQliteData.GetDataReader(ConstData.T_lowMonster, conditon, value);
         //读取数据
         while (reader.Read())
         {
@@ -61,14 +61,14 @@ public class SetSQliteData
     /// <summary>
     /// 给中级怪模型类赋值
     /// </summary>
-    /// <param name="level">中级怪等级</param>
+    /// <param name="conditon">中级怪等级</param>
     /// <param name="value">值</param>
     /// <returns></returns>
-    public MiddleMonsterModel MiddleMonster(string level, string value)
+    public MiddleMonsterModel MiddleMonster(string conditon, string value)
     {
         getSQliteData.OpenDB("Data Source=" + Path.Combine(Application.persistentDataPath, ConstData.dataBase));//根据路径打开数据库
         MiddleMonsterModel middleMonster = new MiddleMonsterModel();//创建小怪模型类对象
-        SqliteDataReader reader = getSQliteData.GetDataReader(ConstData.T_middleMonster, level, value);
+        SqliteDataReader reader = getSQliteData.GetDataReader(ConstData.T_middleMonster, conditon, value);
         //读取数据
         while (reader.Read())
         {
@@ -95,14 +95,14 @@ public class SetSQliteData
     /// <summary>
     /// 给高级怪模型类赋值
     /// </summary>
-    /// <param name="level">高级怪等级</param>
+    /// <param name="conditon">高级怪等级</param>
     /// <param name="value">值</param>
     /// <returns></returns>
-    public HighMonsterModel HighMonster(string level, string value)
+    public HighMonsterModel HighMonster(string conditon, string value)
     {
         getSQliteData.OpenDB("Data Source=" + Path.Combine(Application.persistentDataPath, ConstData.dataBase));//根据路径打开数据库
         HighMonsterModel highMonster = new HighMonsterModel();//创建小怪模型类对象
-        SqliteDataReader reader = getSQliteData.GetDataReader(ConstData.T_highMonster, level, value);
+        SqliteDataReader reader = getSQliteData.GetDataReader(ConstData.T_highMonster, conditon, value);
         //读取数据
         while (reader.Read())
         {
@@ -130,14 +130,14 @@ public class SetSQliteData
     /// <summary>
     /// 给boss模型类赋值
     /// </summary>
-    /// <param name="level">给boss模型类赋值等级</param>
+    /// <param name="conditon">给boss模型类赋值等级</param>
     /// <param name="value">值</param>
     /// <returns></returns>
-    public FinalBossModel FinalBoss(string level, string value)
+    public FinalBossModel FinalBoss(string conditon, string value)
     {
         getSQliteData.OpenDB("Data Source=" + Path.Combine(Application.persistentDataPath, ConstData.dataBase));//根据路径打开数据库
         FinalBossModel finalBoss = new FinalBossModel();//创建小怪模型类对象
-        SqliteDataReader reader = getSQliteData.GetDataReader(ConstData.T_finalBossMonster, level, value);
+        SqliteDataReader reader = getSQliteData.GetDataReader(ConstData.T_finalBossMonster, conditon, value);
         //读取数据
         while (reader.Read())
         {
@@ -170,7 +170,7 @@ public class SetSQliteData
     /// <param name="value">值</param>
     /// <param name="hero">Hero对象</param>
     /// <returns></returns>
-    public HeroModel GetHeroData(string id, string value, HeroModel hero)
+    public HeroModel GetHeroData(string condition, string value, HeroModel hero)
     {
         //创建HeroModel对象
         if(hero == null)
@@ -179,7 +179,7 @@ public class SetSQliteData
         }
 
         getSQliteData.OpenDB("Data Source=" + Path.Combine(Application.persistentDataPath, ConstData.dataBase));//根据路径打开数据库
-        SqliteDataReader reader = getSQliteData.GetDataReader(ConstData.T_hero, id, value);
+        SqliteDataReader reader = getSQliteData.GetDataReader(ConstData.T_hero, condition, value);
         //读取数据
         while (reader.Read())
         {
@@ -195,5 +195,24 @@ public class SetSQliteData
         }
 
         return hero;
+    }
+
+    /// <summary>
+    /// 更新角色数据
+    /// </summary>
+    /// <param name="datas">字段数组</param>
+    /// <param name="hero">角色模型（构建数组）</param>
+    /// <param name="condition">字段id</param>
+    /// <param name="value">值</param>
+    public void UpdateDataBase(HeroModel hero, string condition, string value)
+    {
+        getSQliteData.OpenDB("Data Source=" + Path.Combine(Application.persistentDataPath, ConstData.dataBase));//根据路径打开数据库
+        string[] datas = new string[] { ConstHeroData.money, ConstHeroData.hp, ConstHeroData.mp, ConstHeroData.attack,
+            ConstHeroData.magicDamage, ConstHeroData.armor, ConstHeroData.magicInvocation,
+            ConstHeroData.physicalVampire, ConstHeroData.magicVampire};
+        string[] dataValues = new string[] { hero.Money.ToString(), hero.Hp.ToString(), hero.Mp.ToString(), hero.Attack.ToString(),
+            hero.MagicDamage.ToString(), hero.Armor.ToString(), hero.MagicInvocation.ToString(), hero.PhysicalVampire.ToString(),
+            hero.MagicVampire.ToString()};
+        getSQliteData.UpdateDataReader(ConstData.T_hero, datas, dataValues, condition, value);
     }
 }
