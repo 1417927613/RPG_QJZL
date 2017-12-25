@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/Toon_Level_Kit/Examples/Country_Level.unity
-  isLoaded: 1
-  isActive: 1
